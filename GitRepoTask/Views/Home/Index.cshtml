@@ -1,0 +1,24 @@
+﻿@Model GitRepoTask.Models.GithubUser
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <h2>Search GitHub Profile</h2>
+    <form method="post">
+        <input type="text" name="username" placeholder="Enter GitHub username" required />
+        <button type="submit">Search</button>
+    </form>
+
+    @if (Model != null)
+    {
+        <h3>@Model.Name (@Model.Login)</h3>
+        <img src="@Model.AvatarUrl" alt="Profile Picture" width="100" />
+        <p><strong>Public Repos:</strong> @Model.PublicRepos</p>
+        <p><strong>Followers:</strong> @Model.Followers</p>
+        <p><a href="@Model.HtmlUrl" target="_blank">View Profile on GitHub</a></p>
+    }
+</body>
+</html>
