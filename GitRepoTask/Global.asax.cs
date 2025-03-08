@@ -1,3 +1,4 @@
+using GitRepoTask.App_Start;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,7 @@ namespace GitRepoTask
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            // Setup DI
-            
+            NinjectWebCommon.Start();
         }
     }
 }

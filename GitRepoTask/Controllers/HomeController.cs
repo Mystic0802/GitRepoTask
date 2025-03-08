@@ -10,9 +10,9 @@ namespace GitRepoTask.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly GithubService _githubService;
+        private readonly IGithubService _githubService;
 
-        public HomeController(GithubService githubService)
+        public HomeController(IGithubService githubService)
         {
             _githubService = githubService;
         }
@@ -25,7 +25,9 @@ namespace GitRepoTask.Controllers
                 ViewBag.Title = "Search";
                 return View();
             }
-            var profile = await _githubService.GetGitHubProfileAsync(username);
+            // add some kind of username sanitisation
+            // sanitise(username);
+            var profile = await _githubService.GetProfileDetailsAsync(username);
             ViewBag.Title = $"{username}'s Profile";
             return View(profile);
         }

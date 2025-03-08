@@ -1,4 +1,4 @@
-﻿@Model GitRepoTask.Models.GithubUser
+﻿@model GitRepoTask.Models.GithubProfile
 
 <!DOCTYPE html>
 <html>
@@ -14,11 +14,7 @@
 
     @if (Model != null)
     {
-        <h3>@Model.Name (@Model.Login)</h3>
-        <img src="@Model.AvatarUrl" alt="Profile Picture" width="100" />
-        <p><strong>Public Repos:</strong> @Model.PublicRepos</p>
-        <p><strong>Followers:</strong> @Model.Followers</p>
-        <p><a href="@Model.HtmlUrl" target="_blank">View Profile on GitHub</a></p>
+        @Html.Partial("_GitHubProfile", Model)
     }
 </body>
 </html>

@@ -10,49 +10,61 @@ using System.Web;
 
 namespace GitRepoTask.Services
 {
+    public interface IGithubService
+    {
+        Task<GithubProfile> GetProfileDetailsAsync(string username);
+    }
 
-    public class GithubService
+    public class GithubService : IGithubService
     {
         private readonly HttpClient _httpClient;
+        private readonly RestService _restService;
 
         public GithubService()
         {
-            _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://api.github.com/");
+            _httpClient = new HttpClient { BaseAddress = new Uri("https://api.github.com/") };
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "request");
+            _restService = new RestService(_httpClient);
         }
 
-        public async Task<GithubUser> GetGitHubProfileAsync(string username)
+        public async Task<GithubProfile> GetProfileDetailsAsync(string username)
         {
-            var response = await _httpClient.GetAsync($"users/{username}");
+            var profile = await GetProfileAsync(username);
+            if (profile == null || string.IsNullOrEmpty(profile.repos_url))
+                return null;
 
-            if (!response.IsSuccessStatusCode)
-                return null; // could split into the different codes
+            var repos = await GetGitHubRepoListAsync(profile.repos_url);
 
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<GithubUser>(json);
+            return new GithubProfile
+            {
+                Name = profile.name,
+                Location = profile.location,
+                AvatarUrl = profile.avatar_url,
+                Repos = repos.Select(r => new GithubRepo
+                {
+                    Name = r.name,
+                    Description = r.description,
+                    Url = r.html_url
+                }).OrderByDescending(r => r.StargazersCount)
+                .Take(5)
+                .ToList()
+            };
         }
 
-        public async Task<List<GithubRepo>> GetGitHubRepoListAsync(Uri apiUrl)
+        private async Task<GithubUserResponse> GetProfileAsync(string username)
         {
-            var response = await _httpClient.GetAsync(apiUrl);
+            if (string.IsNullOrEmpty(username))
+                return null;
 
-            if (!response.IsSuccessStatusCode)
-                return null; // could split into the different codes
-
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<List<GithubRepo>>(json);
+            return await _restService.GetAsync<GithubUserResponse>(new Uri($"users/{username}", UriKind.Relative));
         }
 
-        public async Task<T> GetTAsync<T>(Uri apiUrl)
+        private async Task<List<GithubRepoResponse>> GetGitHubRepoListAsync(string apiUrl)
         {
-            var response = await _httpClient.GetAsync(apiUrl);
+            if (string.IsNullOrEmpty(apiUrl))
+                return null;
+            return await _restService.GetAsync<List<GithubRepoResponse>>(new Uri(apiUrl));
 
-            if (!response.IsSuccessStatusCode)
-                return default;
-
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(json);
         }
     }
 }

@@ -1,0 +1,28 @@
+﻿@model GitRepoTask.Models.GithubProfile
+
+@if (Model != null)
+{
+    <div style="display: flex; gap: 10px; align-items: center;">
+        <img src="@Model.AvatarUrl" alt="Profile Picture" width="200" />
+        <img src="@Model.AvatarUrl" alt="Profile Picture" width="200" style="border-radius: 100px" />
+    </div>
+    <h3>@Model.Name</h3>
+    <p><strong>Location:</strong> @(Model.Location ?? "No location found!")</p>
+    <h4>Repositories</h4>
+    if (Model.Repos.Any())
+    {
+
+        <ul>
+            @foreach (var repo in Model.Repos)
+            {
+                <li>
+                    <a href="@repo.Url" target="_blank">@repo.Name</a>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No repositories found... :/</p>
+    }
+}

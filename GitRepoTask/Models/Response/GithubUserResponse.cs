@@ -5,7 +5,7 @@ using System.Web;
 
 namespace GitRepoTask.Models
 {
-    public class GithubUser
+    public class GithubUserResponse
     {
         public string login { get; set; }
         public int id { get; set; }
