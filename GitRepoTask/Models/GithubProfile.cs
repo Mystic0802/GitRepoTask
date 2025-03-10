@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace GitRepoTask.Models
 {
@@ -10,6 +7,6 @@ namespace GitRepoTask.Models
         public string Name { get; set; }
         public string Location { get; set; }
         public string AvatarUrl { get; set; }
-        public List<GithubRepo> Repos { get; set; } = new List<GithubRepo>();
+        public List<GithubRepoResponse> Repos { get; set; } = new List<GithubRepoResponse>();
     }
 }

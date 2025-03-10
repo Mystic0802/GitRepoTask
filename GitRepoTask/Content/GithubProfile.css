@@ -1,0 +1,82 @@
+﻿.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.card {
+    padding: 20px;
+    border-radius: 15px;
+    background: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto 0;
+    width: 90%;
+    max-width: 600px;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.profile-img {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    margin: 10px;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    margin: 10px;
+    flex: 1;
+    min-width: 250px;
+}
+
+.repo-grid-container {
+    display: none;
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.repo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.repo-card {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.toggle-btn {
+    display: block;
+    margin: 15px auto 0;
+    cursor: pointer;
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+@media (max-width: 660px) {
+    .profile-img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .card-content {
+        flex-direction: column;
+        align-items: center;
+    }
+}

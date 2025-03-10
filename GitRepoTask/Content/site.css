@@ -1,14 +1,62 @@
 ﻿body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 14px;
-    color: #333;
+    font-family: 'Segoe UI', sans-serif;
     background-color: #f0f0f0;
     margin: 0;
     padding: 0;
 }
 
-.card {
-    border-width: 1px;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    text-align: center;
+}
+
+form {
+    margin: 2rem auto;
+}
+
+input {
+    width: 100%;
+    max-width: 300px;
+    height: 2rem;
+    font-size: 1rem;
+    text-align: center;
     border-radius: 15px;
-    border-color: #303030;
+    margin: 0.5rem auto;
+    display: block;
+}
+
+button {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, opacity 0.3s;
+}
+
+    button:disabled {
+        background-color: #d6d6d6;
+        color: #666666;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+.alert {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    background-color: #f8d7da;
+}
+
+@media (min-width: 640px) {
+    input {
+        width: 50%;
+        max-width: 500px;
+    }
 }

@@ -1,39 +1,48 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace GitRepoTask.Services
 {
-    public class RestService
+    public interface IRestService
+    {
+        Task<T> GetAsync<T>(Uri apiUrl);
+    }
+
+    public class RestService : IRestService
     {
         private readonly HttpClient _httpClient;
+        private readonly ILoggingService _loggingService;
 
-        public RestService(HttpClient httpClient)
+        public RestService(HttpClient httpClient, ILoggingService loggingService)
         {
             _httpClient = httpClient;
+            _loggingService = loggingService;
+
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "GitRepoTask");
+            _httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public async Task<T> GetAsync<T>(Uri apiUrl)
         {
-            var response = await _httpClient.GetAsync(apiUrl);
-
-            if (!response.IsSuccessStatusCode)
-                return default;
-
             try
             {
+                var response = await _httpClient.GetAsync(apiUrl);
+
+                if (!response.IsSuccessStatusCode)
+                    return default;
+
                 var json = await response.Content.ReadAsStringAsync();
-                var obj = JsonConvert.DeserializeObject<T>(json);
-                return obj;
+                return JsonConvert.DeserializeObject<T>(json);
             }
-            catch
+            catch (Exception ex)
             {
+                _loggingService.LogError($"Error while accessing API ({apiUrl}): ", ex);
                 return default;
             }
         }
+
     }
 }

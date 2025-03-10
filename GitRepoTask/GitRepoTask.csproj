@@ -63,6 +63,7 @@
     <Reference Include="System.Net.Http.Formatting, Version=5.2.9.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.9\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -113,8 +114,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\GithubProfile.css" />
     <Content Include="Content\site.css" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\githubsearch.js" />
+    <None Include="Scripts\jquery-3.7.0.intellisense.js" />
+    <Content Include="Scripts\jquery-3.7.0.js" />
+    <Content Include="Scripts\jquery-3.7.0.min.js" />
+    <Content Include="Scripts\jquery-3.7.0.slim.js" />
+    <Content Include="Scripts\jquery-3.7.0.slim.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\site.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -125,12 +139,16 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\GithubProfile.cs" />
-    <Compile Include="Models\GithubRepo.cs" />
+    <Compile Include="Models\GithubProfileResult.cs" />
+    <Compile Include="Models\GithubProfileSearchViewModel.cs" />
+    <Compile Include="Models\ProfileSearch.cs" />
     <Compile Include="Models\Response\GithubRepoResponse.cs" />
     <Compile Include="Models\Response\GithubUserResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\GithubService.cs" />
+    <Compile Include="Services\LoggingService.cs" />
     <Compile Include="Services\RestService.cs" />
+    <Compile Include="Services\ValidationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -139,6 +157,8 @@
     <Content Include="Views\shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\shared\_GithubProfile.cshtml" />
+    <Content Include="Scripts\jquery-3.7.0.min.map" />
+    <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
