@@ -1,32 +1,19 @@
-﻿@model GitRepoTask.Models.GithubProfileSearchViewModel
+﻿@model GitRepoTask.Models.ProfileSearch
 
-<!DOCTYPE html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="~/Content/GithubProfile.css" />
-    <title>Search GitHub Profile</title>
-    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
-    <script src="~/Scripts/githubSearch.js"></script>
-</head>
-<body>
-    <div style="text-align:center;">
-        <h2>Search GitHub Profile</h2>
-        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "searchForm" }))
-        {
-            @Html.TextBoxFor(vm => vm.SearchModel.Username, new { placeholder = "Github Username", id = "SearchModel_Username" })
+<div style="text-align:center;">
+    <h2>Search GitHub Profile</h2>
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "searchForm" }))
+    {
+        <div style="display:block">
+            @Html.TextBoxFor(p => p.Username, new { placeholder = "Github Username", id = "SearchModel_Username" })
             <button type="submit" id="ajaxSearchButton">Search</button>
-            @Html.ValidationMessageFor(vm => vm.SearchModel.Username)
-        }
-        <div id="loadingIndicator" style="display:none;">Loading...</div>
-        <div id="errorMessage" style="color: red; display: none;">test</div>
-        @if (ViewBag.Error != null)
-        {
-            <div style="color: red;">
-                @ViewBag.Error
-            </div>
-        }
-    </div>
-    <div id="profileContainer"></div>
-</body>
+        </div>
+        @Html.ValidationMessageFor(p => p.Username, "", new { @class = "error-message"})
+    }
+    <div id="loadingIndicator" style="display:none;">Loading...</div>
+    <div id="errorMessage" class="error-message" style="display: none;"></div>
+</div>
+<div id="profileContainer"></div>
+@section scripts {
+    <script src="~/Scripts/githubSearch.js"></script>
+}

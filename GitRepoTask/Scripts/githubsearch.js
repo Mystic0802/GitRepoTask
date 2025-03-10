@@ -38,8 +38,12 @@
             error: function (xhr) {
                 var message = "An unexpected error occurred! Please try again later.";
 
-                if (xhr.responseJSON && xhr.responseJSON.message) {
-                    message = xhr.responseJSON.message;
+                if (xhr.status === 400) {
+                    console.log(xhr);
+                    message = xhr.responseText;
+                } else if (xhr.status === 404) {
+                    console.log(xhr);
+                    message = xhr.responseText;
                 }
 
                 $("#errorMessage").text(message).show();

@@ -53,7 +53,8 @@ namespace GitRepoTask.Services
 
             var githubProfile = new GithubProfile
             {
-                Name = profile.name ?? "N/A",
+                Username = username,
+                Name = profile.name,
                 Location = profile.location ?? "Unknown",
                 AvatarUrl = profile.avatar_url ?? "",
                 Repos = repos.OrderByDescending(r => r.Stargazers_Count)

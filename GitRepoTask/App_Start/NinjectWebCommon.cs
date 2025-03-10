@@ -37,8 +37,7 @@ namespace GitRepoTask.App_Start
             kernel.Bind<IRestService>().To<RestService>().InRequestScope();
             kernel.Bind<IGithubService>().To<GithubService>().InRequestScope();
             kernel.Bind<ILoggingService>().To<LoggingService>().InRequestScope();
-            kernel.Bind<IValidationService>().To<ValidationService>().InRequestScope();
-            kernel.Unbind<ModelValidatorProvider>();
+            kernel.Unbind<ModelValidatorProvider>(); // Client-side validation is not work without this line.
         }
     }
 }

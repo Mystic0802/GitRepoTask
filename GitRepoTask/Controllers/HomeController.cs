@@ -2,6 +2,7 @@
 using GitRepoTask.Services;
 using System;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 namespace GitRepoTask.Controllers
@@ -10,99 +11,41 @@ namespace GitRepoTask.Controllers
     {
         private readonly IGithubService _githubService;
         private readonly ILoggingService _loggingService;
-        private readonly IValidationService _validationService;
 
-        public HomeController(IGithubService githubService, ILoggingService loggingService, IValidationService validationService)
+        public HomeController(IGithubService githubService, ILoggingService loggingService)
         {
             _githubService = githubService;
             _loggingService = loggingService;
-            _validationService = validationService;
         }
 
         [HttpGet]
         [Route("/")]
-        public async Task<ActionResult> Index(string username)
+        public ViewResult Index()
         {
             ViewBag.Title = "Search";
 
-            if (string.IsNullOrWhiteSpace(username))
-            {
-                return View(new GithubProfileSearchViewModel());
-            }
-
-            var viewModel = new GithubProfileSearchViewModel
-            {
-                SearchModel = new ProfileSearch { Username = username }
-            };
-
-            if (!_validationService.IsValidUsername(username))
-            {
-                ViewBag.Error = "Please enter a valid GitHub username";
-                return View(viewModel);
-            }
-
-            var result = await GetGithubProfileResultAsync(username);
-
-            if (!result.Success)
-            {
-                ViewBag.Error = result.ErrorMessage;
-                return View(viewModel);
-            }
-
-            viewModel.Profile = result.Profile;
-            ViewBag.Title = $"{username}'s Profile";
-            ViewBag.Warning = result.WarningMessage;
-
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        [Route("/")]
-        public async Task<ActionResult> Index(GithubProfileSearchViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Error = "Please enter a valid GitHub username";
-                return View(viewModel);
-            }
-
-            var result = await GetGithubProfileResultAsync(viewModel.SearchModel.Username);
-
-            if(!result.Success)
-            {
-                ViewBag.Error = result.ErrorMessage;
-                return View(viewModel);
-            }
-
-            viewModel.Profile = result.Profile;
-            ViewBag.Title = $"{viewModel.SearchModel.Username}'s Profile";
-            return View(viewModel);
+            return View(new ProfileSearch());
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetProfilePartial(string username)
+        public async Task<ActionResult> GetProfilePartial(ProfileSearch profileSearch)
         {
-            if (!_validationService.IsValidUsername(username))
+            if (!ModelState.IsValid)
             {
-                return Json(new
-                {
-                    success = false,
-                    message = "Please enter a valid GitHub username"
-                }, JsonRequestBehavior.AllowGet);
+                Response.StatusCode = 400;
+                return Content("Please enter a valid GitHub username");
             }
+
+            var username = profileSearch.Username;
 
             var result = await GetGithubProfileResultAsync(username);
 
             if(!result.Success)
             {
-                return Json(new
-                {
-                    success = false,
-                    message = result.ErrorMessage
-                }, JsonRequestBehavior.AllowGet);
+                Response.StatusCode = 404;
+                return Content(result.ErrorMessage);
             }
 
-            ViewBag.Warning = result.WarningMessage;
             return PartialView("_GithubProfile", result.Profile);
         }
 
@@ -116,22 +59,23 @@ namespace GitRepoTask.Controllers
 
                 if (profile == null)
                 {
-                    return GithubProfileResult.CreateFailure("User not found. Please check the username and try again.");
+                    return new GithubProfileResult() 
+                    { 
+                        Success = false,
+                        ErrorMessage = "User not found. Please check the username and try again." };
                 }
 
-                var result = GithubProfileResult.CreateSuccess(profile);
-
-                if (profile.Repos == null || profile.Repos.Count == 0)
-                {
-                    result.WarningMessage = "This user doesn't have any public repositories.";
-                }
+                var result = new GithubProfileResult() {
+                    Success = true,
+                    Profile = profile
+                };
 
                 return result;
             }
             catch (Exception ex)
             {
                 _loggingService.LogError($"Error retrieving profile for {username}", ex);
-                return GithubProfileResult.CreateFailure("An unexpected error occurred! Please try again later.");
+                return new GithubProfileResult() { Success = false, ErrorMessage = "User not found. Please check the username and try again." };
             }
         }
 

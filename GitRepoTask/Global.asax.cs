@@ -1,5 +1,7 @@
+using GithubRepo_TechTask;
 using GitRepoTask.App_Start;
 using System.Web.Mvc;
+using System.Web.Optimization;
 using System.Web.Routing;
 
 namespace GitRepoTask
@@ -10,7 +12,7 @@ namespace GitRepoTask
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
             NinjectWebCommon.Start();
         }
     }

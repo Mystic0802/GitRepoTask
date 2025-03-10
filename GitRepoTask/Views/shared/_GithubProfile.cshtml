@@ -2,18 +2,21 @@
 
 @if (Model != null)
 {
+    <head>
+        <link rel="stylesheet" href="~/Content/GithubProfile.css" />
+    </head>
     <div class="profile-container">
         <div class="card">
             <div class="card-content">
                 <img src="@Model.AvatarUrl" class="profile-img" alt="Profile Picture" />
                 <div class="profile-info">
-                    <h3>@Model.Name</h3>
+                    <h3>@Model.Username @(@Model.Name == null ? "" : "(" + Model.Name + ")")</h3>
                     <p><strong>Location:</strong> @(Model.Location ?? "No location found!")</p>
 
-                    @if (ViewBag.Warning != null)
+                    @if (Model.Repos == null || !Model.Repos.Any())
                     {
                         <div>
-                            @ViewBag.Warning
+                            <p>This user doesn't have any public repositories.</p>
                         </div>
                     }
 
