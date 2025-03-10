@@ -15,6 +15,8 @@ namespace GitRepoTask.Services
 
     public class GithubService : IGithubService
     {
+        const string GITHUB_API_URL = "https://api.github.com/users/";
+
         private readonly IRestService _restService;
         private readonly ILoggingService _loggingService;
         private readonly MemoryCache _cache;
@@ -69,7 +71,7 @@ namespace GitRepoTask.Services
 
         private async Task<GithubUserResponse> GetProfileAsync(string username)
         {
-            return await _restService.GetAsync<GithubUserResponse>(new Uri($"https://api.github.com/users/{username}"));
+            return await _restService.GetAsync<GithubUserResponse>(new Uri(GITHUB_API_URL + username));
         }
 
         private async Task<List<GithubRepoResponse>> GetGitHubRepoListAsync(string apiUrl)

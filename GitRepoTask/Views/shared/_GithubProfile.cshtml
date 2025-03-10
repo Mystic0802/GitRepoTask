@@ -48,10 +48,9 @@
                     @foreach (var repo in Model.Repos)
                     {
                         <div class="repo-card">
-                            <h4>@repo.Name</h4>
+                            <a href="@repo.Html_url" target="_blank"><h4>@repo.Name</h4></a>
                             <p>@(string.IsNullOrWhiteSpace(repo.Description) ? "No description" : repo.Description)</p>
                             <p>⭐ @repo.Stargazers_Count</p>
-                            <a href="@repo.Html_url" target="_blank">View Repository</a>
                         </div>
                     }
                 </div>
